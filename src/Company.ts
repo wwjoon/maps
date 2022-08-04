@@ -1,14 +1,16 @@
 import faker from 'faker';
 
-export class User {
-  name: string;
+export class Company {
+  companyName: string;
+  catchPhrase: string;
   location: {
     lat: number;
     lng: number;
   };
 
   constructor() {
-    this.name = faker.name.firstName() + faker.name.lastName();
+    this.companyName = faker.company.companyName();
+    this.catchPhrase = faker.company.catchPhrase();
     this.location = {
       // faker module에서의 위도, 경도의 타입은 string이므로 parseFloat으로 변환.
       lat: parseFloat(faker.address.latitude()),
