@@ -1,6 +1,7 @@
 # maps
 
 > Maps project for Typescript basic
+> Implementation of class and interface interactions
 
 ## Build Setup
 
