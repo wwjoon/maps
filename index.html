@@ -1,9 +1,36 @@
 <body>
   <section style="text-align: center">
-    <h1 id="title"></h1>
-    <h2 id="lat"></h2>
-    <h2 id="lng"></h2>
-    <div id="google-map"></div>
+    <input id="fileUpload" type="file" style="display: none" />
+    <div id="imageSelect" style="margin-top: 50px">
+      <button
+        id="btn"
+        style="
+          color: white;
+          background-color: grey;
+          width: 500px;
+          height: 200px;
+        "
+      >
+        비상벨 설치 완료 사진 [선택]
+      </button>
+    </div>
+    <div style="margin-top: 20px">
+      <button
+        id="dbCall"
+        style="color: white; background-color: blue; width: 150px; height: 50px"
+      >
+        사진 & 위치 업로드
+      </button>
+    </div>
+
+    <div style="margin: 80 200 200 200">
+      <div id="google-map" style="float: left"></div>
+      <div>
+        <h1 id="title"></h1>
+        <h2 id="lat"></h2>
+        <h2 id="lng"></h2>
+      </div>
+    </div>
   </section>
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrJhOMz6idD05pzfn5lhA-TAw-mAZCU&callback=initMap"
@@ -37,10 +64,22 @@
         title: "Hello World!",
       });
 
-      document.getElementById("title").innerHTML = `현재 위치`;
+      document.getElementById("title").innerHTML = `[ 현재 위치 정보 ]`;
       document.getElementById("lat").innerHTML = `위도: ${coords.latitude}`;
       document.getElementById("lng").innerHTML = `경도: ${coords.longitude}`;
       // console.log(`위도: ${coords.latitude}, 경도: ${coords.longitude}`);
+    }
+
+    document
+      .getElementById("imageSelect")
+      .addEventListener("click", imageSelect);
+    document.getElementById("dbCall").addEventListener("click", dbCall);
+
+    function imageSelect() {
+      document.getElementById("fileUpload").click();
+    }
+    function dbCall() {
+      alert("사진 & 위치정보 전송 완료");
     }
   </script>
   <style>
