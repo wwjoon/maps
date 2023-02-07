@@ -29,6 +29,7 @@
         <h1 id="title"></h1>
         <h2 id="lat"></h2>
         <h2 id="lng"></h2>
+        <h2 id="copy"></h2>
       </div>
     </div>
   </section>
@@ -67,6 +68,9 @@
       document.getElementById("title").innerHTML = `[ 현재 위치 정보 ]`;
       document.getElementById("lat").innerHTML = `위도: ${coords.latitude}`;
       document.getElementById("lng").innerHTML = `경도: ${coords.longitude}`;
+      document.getElementById(
+        "copy"
+      ).innerHTML = `Copy: ${coords.latitude}, ${coords.longitude}`;
       // console.log(`위도: ${coords.latitude}, 경도: ${coords.longitude}`);
     }
 
