@@ -1,95 +1,123 @@
-<body>
-  <section style="text-align: center">
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Location on Google Maps</title>
     <input id="fileUpload" type="file" style="display: none" />
-    <div id="imageSelect" style="margin-top: 50px">
-      <button
-        id="btn"
-        style="
-          color: white;
-          background-color: grey;
-          width: 500px;
-          height: 200px;
-        "
-      >
-        비상벨 설치 완료 사진 [선택]
-      </button>
-    </div>
-    <div style="margin-top: 20px">
-      <button
-        id="dbCall"
-        style="color: white; background-color: blue; width: 150px; height: 50px"
-      >
-        사진 & 위치 업로드
-      </button>
-    </div>
-
-    <div style="margin: 80 200 200 200">
-      <div id="google-map" style="float: left"></div>
-      <div>
-        <h1 id="title"></h1>
-        <h2 id="lat"></h2>
-        <h2 id="lng"></h2>
-        <h2 id="copy"></h2>
+    <div style="text-align: center">
+      <h1>비상벨 설치 완료 처리</h1>
+      <div id="imageSelect" style="margin-top: 50px">
+        <button
+          id="btn"
+          style="
+            color: white;
+            background-color: grey;
+            width: 500px;
+            height: 200px;
+          "
+        >
+          설치 이미지 [선택]
+        </button>
+      </div>
+      <div style="margin: 10px 0">
+        <button
+          id="dbCall"
+          style="
+            color: white;
+            background-color: blue;
+            width: 150px;
+            height: 50px;
+          "
+        >
+          사진 & 위치 전송
+        </button>
       </div>
     </div>
-  </section>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrJhOMz6idD05pzfn5lhA-TAw-mAZCU&callback=initMap"
-    async
-    defer
-  ></script>
-
-  <script>
-    let map;
-    const API_KEY = "29222c3f6e4a9f1afe0b6d040c333024";
-
-    initMap = async () => {
-      // 현재 위치 가져오기
-      if (!navigator.geolocation) {
-        throw "위치 정보가 지원되지 않습니다.";
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNLrJhOMz6idD05pzfn5lhA-TAw-mAZCU&callback=initMap"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+    <style>
+      .copy-button {
+        padding: 10px 20px;
+        background-color: #4285f4;
+        color: #fff;
+        border-radius: 50px;
+        font-size: 14px;
+        cursor: pointer;
       }
-      await navigator.geolocation.getCurrentPosition(success);
-    };
+      @media (max-width: 385px) {
+        #copy-location {
+          display: block;
+          padding: 10px 20px;
+          background-color: #4285f4;
+          color: #fff;
+          border-radius: 50px;
+          font-size: 14px;
+          cursor: pointer;
+          bottom: 20px;
+          left: 20px;
+        }
+        #map {
+          height: 300px;
+        }
+      }
+    </style>
+    <script>
+      function initMap() {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          var myLatLng = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
 
-    function success({ coords, timestamp }) {
-      const myLatLng = { lat: coords.latitude, lng: coords.longitude };
+          var map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: myLatLng,
+          });
 
-      map = new google.maps.Map(document.getElementById("google-map"), {
-        center: myLatLng,
-        zoom: 15,
-      });
+          var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: "Here I am!",
+          });
 
-      new google.maps.Marker({
-        position: myLatLng,
-        map,
-        title: "Hello World!",
-      });
+          var contentString =
+            "<div><h1>현재 위치</h1>" +
+            "<h3>위도: " +
+            position.coords.latitude +
+            "</p>" +
+            "<h3>경도: " +
+            position.coords.longitude +
+            "</h3>" +
+            '<button class="copy-button" id="copy-button" data-clipboard-text="' +
+            position.coords.latitude +
+            ", " +
+            position.coords.longitude +
+            '">복사하기</button></div>';
 
-      document.getElementById("title").innerHTML = `[ 현재 위치 정보 ]`;
-      document.getElementById("lat").innerHTML = `위도: ${coords.latitude}`;
-      document.getElementById("lng").innerHTML = `경도: ${coords.longitude}`;
-      document.getElementById(
-        "copy"
-      ).innerHTML = `Copy: ${coords.latitude}, ${coords.longitude}`;
-      // console.log(`위도: ${coords.latitude}, 경도: ${coords.longitude}`);
-    }
+          var infoWindow = new google.maps.InfoWindow({
+            content: contentString,
+          });
 
-    document
-      .getElementById("imageSelect")
-      .addEventListener("click", imageSelect);
-    document.getElementById("dbCall").addEventListener("click", dbCall);
+          marker.addListener("click", function () {
+            infoWindow.open(map, marker);
+            new ClipboardJS("#copy-button");
+          });
+        });
+      }
 
-    function imageSelect() {
-      document.getElementById("fileUpload").click();
-    }
-    function dbCall() {
-      alert("사진 & 위치정보 전송 완료");
-    }
-  </script>
-  <style>
-    #google-map {
-      width: 500px;
-      height: 300px;
-    }
-  </style>
-</body>
+      document
+        .getElementById("imageSelect")
+        .addEventListener("click", imageSelect);
+      document.getElementById("dbCall").addEventListener("click", dbCall);
+
+      function imageSelect() {
+        document.getElementById("fileUpload").click();
+      }
+      function dbCall() {
+        alert("사진 & 위치정보 전송 완료");
+      }
+    </script>
+  </head>
+  <body onload="initMap()">
+    <div id="map" style="height: 500px; width: 100%"></div>
+  </body>
+</html>

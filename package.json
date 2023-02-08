@@ -1,4 +1,11 @@
 {
+  "name": "maps",
+  "version": "1.0.0",
+  "description": "Get current location, latitude and longitude with Google Maps API",
+  "license": "MIT",
+  "scripts": {
+    "start": "yarn parcel index.html"
+  },
   "devDependencies": {
     "typescript": "^4.7.4"
   },
